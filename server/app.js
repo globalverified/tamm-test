@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 //using middleware
 app.get('/about', middleware, (req, res) => {
   console.log(`after middleware`);
-  res.send(`hello about me`);
+  res.send(`hello about TAMM`);
 });
 
 app.listen(3000, () => {
