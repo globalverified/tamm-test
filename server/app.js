@@ -1,8 +1,14 @@
-const express = require('express');
-const app = express(); //with app var we connected with express
-const router = express.Router();
+import express,{Router} from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+const app = express(); 
+
+app.use(bodyParser.json({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}));//it will make sure space ya kuch extra characters na jaye
+app.use(cors());
 
 app.use(express.json());
+
 
 //middleware implemented here
 const middleware = (req, res, next) => {
@@ -21,14 +27,16 @@ app.get('/about', middleware, (req, res) => {
   res.send(`hello about TAMM`);
 });
 
-router.post('/signin', (req, res) => {
+Router.post('/signin', (req, res) => {
   console.log('signin details: ', req.body);
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ error: 'plz fill the data' });
+      return res
+        .status(400)
+        .json({ error: 'plz fill the useremail and password' });
     }
-    if (email == 'admin@itc.com' && password == 'password') {
+    if (email == 'admin@tamm.com' && password == 'password') {
       res.json({ message: 'TAMM user signin successfully' });
     } else {
       userLogin = false;
