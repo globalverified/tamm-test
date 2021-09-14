@@ -6,6 +6,7 @@ app.use(express.json());
 //middleware implemented here
 const middleware = (req, res, next) => {
   console.log(`TAMM middleware`);
+  //our validation for the use of middleware will be done then next() will work
   next();
 };
 
