@@ -25,19 +25,18 @@ app.use(express.json());
 app.use(cookieParser());
 
 //middleware implemented here
-const middleware = (req, res, next) => {
+const middleware = (req: any, res: any, next: any) => {
   console.log(`TAMM middleware`);
   //our validation for the use of middleware will be done then next() will work
   next();
 };
-
-const sessionmiddleware = (req, res, next) => {
+var Session;
+const sessionmiddleware = (req: any, res: any, next: any) => {
   console.log(`TAMM sessionmiddleware`);
-  validateUrl(req.body.url);
   // that only allows request to proceed if req has session
   if (req.session && (req.path == '/pub/proxy' || req.path == '/api/proxy')) {
-    session = req.session;
-    console.log('session - ', req.session);
+    Session = req.session;
+    console.log('session - ', Session);
     res.send('Welcome this request has a session');
     next();
   } else {
@@ -45,22 +44,22 @@ const sessionmiddleware = (req, res, next) => {
     res.redirect('/');
   }
 };
-const checkSession = (req, res, next) => {
+const checkSession = (req: any, res: any, next: any) => {
   if (req.session) {
     let fileId = req.params.id;
     res.json({ id: fileId });
     next();
   }
 };
-const checkSaveSession = (req, res, next) => {
+const checkSaveSession = (req: any, res: any, next: any) => {
   if (req.session && req.body) {
-    fs.readFile(__dirname, 'utf8', function(err, data) {
+    fs.readFile(__dirname, 'utf8', function(err: any, data: any) {
       if (err) {
         return console.log(err);
       }
       var reqBody = req.body;
       var result = data.replace(reqBody, 'replacement');
-      fs.writeFile(__dirname, result, 'utf8', function(err) {
+      fs.writeFile(__dirname, result, 'utf8', function(err: any) {
         if (err) return console.log(err);
       });
     });
@@ -68,34 +67,34 @@ const checkSaveSession = (req, res, next) => {
   }
 };
 
-app.get('/', (req, res) => {
+app.get('/', (req: any, res) => {
   res.send(`hello from TAMM server app.js`);
 });
 
 //using middleware
-app.get('/about', middleware, (req, res) => {
+app.get('/about', middleware, (req: any, res) => {
   console.log(`after middleware`);
   res.send(`hello about TAMM`);
 });
 
-app.use('/pub/proxy', sessionmiddleware, (req, res) => {
+app.use('/pub/proxy', sessionmiddleware, (req: any, res) => {
   console.log(`after sessionmiddleware`);
   res.send(`sessionmiddleware worked`);
 });
 
-app.use('/api/proxy ', sessionmiddleware, (req, res) => {
+app.use('/api/proxy ', sessionmiddleware, (req: any, res) => {
   console.log(`after sessionmiddleware`);
   res.send(`sessionmiddleware worked`);
 });
 
-app.get('/read/:id', checkSession, (req, res) => {
+app.get('/read/:id', checkSession, (req: any, res) => {
   res.send(`session available for read id`);
 });
-app.post('/save/:id', checkSaveSession, (req, res) => {
+app.post('/save/:id', checkSaveSession, (req: any, res) => {
   console.log('save id details: ', req.body);
 });
 
-Router.post('/signin', (req, res) => {
+app.post('/signin', (req: any, res: any) => {
   console.log('signin details: ', req.body);
   try {
     const { email, password } = req.body;
@@ -107,7 +106,6 @@ Router.post('/signin', (req, res) => {
     if (email == 'admin@tamm.com' && password == 'password') {
       res.json({ message: 'TAMM user signin successfully' });
     } else {
-      userLogin = false;
       res.status(400).json({ error: 'signin error' });
     }
   } catch (e) {
