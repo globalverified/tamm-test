@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-// import Child from './child';
 
 export default function HOC(props) {
+  let defaultText = ':)';
+  const [text, setText] = React.useState(defaultText);
+
   return (
     <>
       <h3>From HOC</h3>
-      <props.childName
-        title="Mera Bachha"
-        changeColorFeature={props.decision}
-      />
+      <section
+        onMouseOver={() => setText('Hover IN ')}
+        onMouseLeave={() => setText('Hover OUT ')}
+      >
+        <props.childName
+          title="Mera Bachha"
+          hoverText={text}
+          changeColorFeature={true}
+        />
+      </section>
     </>
   );
 }
